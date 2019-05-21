@@ -4,13 +4,16 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Solution solution = new Solution();
-        String longestPalindrome = solution.longestPalindrome("a");
-        System.out.println(longestPalindrome);
+        String str = "ababd";
+        String res1 = new SolutionDynamicProgramming().longestPalindrome(str);
+        String res2 = new SolutionDiffusion().longestPalindrome(str);
+        System.out.println(res1);
+        System.out.println(res2);
     }
 }
 
-class Solution {
+// Time : O(n*n), space: O(n*n)
+class SolutionDynamicProgramming {
     public String longestPalindrome(String s) {
         if (null == s || s.length() == 0) {
             return s;
@@ -38,5 +41,36 @@ class Solution {
             }
         }
         return longestPalindrome;
+    }
+}
+
+// Time : O(n*n), space: O(n)
+class SolutionDiffusion {
+
+    String res = "";
+
+    public String longestPalindrome(String s) {
+        if (null == s || s.length() == 0) {
+            return s;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            helper(s, i, i);
+            helper(s, i, i + 1);
+        }
+        return res;
+    }
+
+    // l'l
+    // a b a b d
+    //       r r'
+    private void helper(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        String str = s.substring(left + 1, right);
+        if (str.length() > res.length()) {
+            res = str;
+        }
     }
 }
