@@ -13,6 +13,8 @@ public class Main {
 
 class Solution {
     public boolean isPalindrome(int x) {
+    	// 0 - 9 are palindrome numbers
+        if (x >= 0 && x < 10) return true;
         if (x < 0 || 0 == x % 10) return false;
         int temp = 0;
         while (x > temp) {
