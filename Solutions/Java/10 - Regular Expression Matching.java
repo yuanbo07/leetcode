@@ -69,10 +69,9 @@ public class Main {
                         if ('.' != preCurP && preCurP != curS) {
                             dp[i][j] = dp[i][j - 2];
                         } else {
-                            // dp[i][j-1]: If character before * appears once
-                            // dp[i-1][j]: If character before * appears more than once
+                            // dp[i-1][j]: If character before * appears >= 1 times
                             // dp[i][j-2]: If skip is necessary to match (even if c matches)
-                            dp[i][j] = dp[i][j - 1] || dp[i - 1][j] || dp[i][j-2];
+                            dp[i][j] = dp[i - 1][j] || dp[i][j-2];
                         }
                     }
                 }
