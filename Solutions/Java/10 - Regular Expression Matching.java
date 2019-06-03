@@ -32,5 +32,53 @@ public class Main {
     private static boolean checkFirstChar(String s, String p) {
         return s.charAt(0) == p.charAt(0) || p.charAt(0) == '.';
     }
+
+    static class SolutionDP {
+        public boolean isMatch(String s, String p) {
+
+            if (null == s || null == p) {
+                return false;
+            }
+
+            int lenStr = s.length();
+            int lenPattern = p.length();
+
+            boolean[][] dp = new boolean[lenStr + 1][lenPattern + 1];
+
+            // if p and s are both empty, it's a match
+            dp[0][0] = true;
+            // if s is empty, p can be a match if p = (.*)*
+            // attention the array cursor is one more than the str ordinal
+            for (int i = 2; i < lenPattern + 1; i += 2) {
+                if ('*' == p.charAt(i - 1) && dp[0][i - 2]) {
+                    dp[0][i] = true;
+                }
+            }
+
+            for (int i = 1; i < lenStr + 1; i++) {
+                for (int j = 1; j < lenPattern + 1; j++) {
+                    char curS = s.charAt(i - 1);
+                    char curP = p.charAt(j - 1);
+                    // if the character matches or equal to '.'
+                    if ('.' == curP || curS == curP) {
+                        dp[i][j] = dp[i - 1][j - 1];
+                        // if we meet a '*' in p
+                    } else if ('*' == curP) {
+                        char preCurP = p.charAt(j - 2);
+                        // if the latter character does not match, this #* is a match because it can be null
+                        if ('.' != preCurP && preCurP != curS) {
+                            dp[i][j] = dp[i][j - 2];
+                        } else {
+                            // dp[i][j-1]: If character before * appears once
+                            // dp[i-1][j]: If character before * appears more than once
+                            // dp[i][j-2]: If skip is necessary to match (even if c matches)
+                            dp[i][j] = dp[i][j - 1] || dp[i - 1][j] || dp[i][j-2];
+                        }
+                    }
+                }
+            }
+            return dp[lenStr][lenPattern];
+        }
+    }
 }
 
