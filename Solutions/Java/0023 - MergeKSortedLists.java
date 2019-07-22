@@ -42,6 +42,8 @@ class ListNode {
 }
 
 /**
+ * n: total number of elements
+ * k: number of sorted lists
  *
  * Time complexity : O(nlogn) <- loop over list O(n), sort O(nlogn)
  * Space complexity: O(n) <- list of n elements
@@ -68,11 +70,10 @@ class SolutionBruteForce {
 
 
 /**
- *
  * Time:
  * Loop to get the min node : O(k), where k is the number of lists
  * Loop over each list : O(n)
- * complexity: O(n*k)
+ * complexity: O(nk)
  *
  * Space:
  * We only use the same listnode : O(1)
@@ -112,5 +113,36 @@ class SolutionPointer {
             return nodeMinValue;
         }
         return null;
+    }
+}
+
+/**
+ * Time:
+ * Build the heap: O(k)
+ * Loop over all elements: O(nlogk) => the heap always contains k elements so logk for enqueing and dequeing
+ * Complexity: O(nlogk)
+ *
+ * Space complexity: O(k)
+ */
+class SolutionPriorityQueue {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (null == lists || 0 == lists.length)
+            return null;
+        PriorityQueue<ListNode> heap = new PriorityQueue<>(lists.length, Comparator.comparingInt(o -> o.val));
+        ListNode dummyHead = new ListNode(0);
+        ListNode cursor = dummyHead;
+        for (ListNode node : lists) {
+            if (node != null)
+                heap.offer(node);
+        }
+        while (!heap.isEmpty()) {
+            // link next node
+            cursor.next = heap.poll();
+            // move cursor forward
+            cursor = cursor.next;
+            if (null != cursor.next)
+                heap.offer(cursor.next);
+        }
+        return dummyHead.next;
     }
 }
