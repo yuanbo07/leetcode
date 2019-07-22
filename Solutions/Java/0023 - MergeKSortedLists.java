@@ -80,12 +80,14 @@ class SolutionBruteForce {
  */
 class SolutionPointer {
     public ListNode mergeKLists(ListNode[] lists) {
+        // only for returning head of merged list
         ListNode dumpHead = new ListNode(0);
         ListNode nodeMinValue = getMinNode(lists);
-        ListNode nodeHeadOfMergedList = dumpHead;
+        // the cursor node that needles k lists together
+        ListNode cursorNode = dumpHead;
         while (nodeMinValue != null) {
-            nodeHeadOfMergedList.next = nodeMinValue;
-            nodeHeadOfMergedList = nodeMinValue;
+            cursorNode.next = nodeMinValue;
+            cursorNode = nodeMinValue;
             nodeMinValue = getMinNode(lists);
         }
         return dumpHead.next;
@@ -105,7 +107,7 @@ class SolutionPointer {
         }
         if (-1 != indexValueMin) {
             ListNode nodeMinValue = lists[indexValueMin];
-            // move the cursor to the next element of the list containing min value
+            // update lists (take the next node of the nodeMinValue as head)
             lists[indexValueMin] = nodeMinValue.next;
             return nodeMinValue;
         }
