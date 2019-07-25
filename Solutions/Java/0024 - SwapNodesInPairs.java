@@ -60,3 +60,27 @@ class Solution {
         return p2;
     }
 }
+
+/**
+ * Time complexity: O(n)
+ * Space complexity: O(1)
+ */
+class SolutionIterative {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode current = dummy;
+        while (null != current.next && null != current.next.next) {
+            swap(current);
+            current = current.next.next;
+        }
+        return dummy.next;
+    }
+
+    private void swap(ListNode pre) {
+        ListNode dummy = pre.next;
+        pre.next = dummy.next;
+        dummy.next = dummy.next.next;
+        pre.next.next = dummy;
+    }
+}
