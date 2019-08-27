@@ -35,3 +35,60 @@ class Solution {
         return -1;
     }
 }
+
+/**
+ * Knuth-Morris-Pratt (KPM) algorithm.
+ *
+ * m : length of String
+ * n : length of needle
+ *
+ * LPS (longest prefix suffix) example:
+ *
+ * ababd
+ * 00120
+ *
+ * Space complexity O(n)
+ * Time complexity O(n + m)
+ */
+class Solution {
+
+    public static int[] getLPS(char[] t) {
+        int[] lps = new int[t.length];
+        lps[0] = -1;
+        lps[1] = 0;
+        int k;
+        for (int j = 2; j < t.length; j++) {
+            k = lps[j - 1];
+            while (k != -1) {
+                if (t[j - 1] == t[k]) {
+                    lps[j] = k + 1;
+                    break;
+                } else {
+                    k = lps[k];
+                }
+                // when k == -1
+                lps[j] = 0;
+            }
+        }
+        return lps;
+    }
+
+    int strStr(String haystack, String needle) {
+        char[] arrHaystack = haystack.toCharArray();
+        char[] arrNeedle = needle.toCharArray();
+        int[] lps = getLPS(arrNeedle);
+        int i = 0;
+        int j = 0;
+        while (i < arrHaystack.length && j < arrNeedle.length) {
+            if (j == -1 || arrHaystack[i] == arrNeedle[j]) {
+                i++;
+                j++;
+            } else
+                j = lps[j];
+        }
+        if (j == arrNeedle.length)
+            return i - j;
+        else
+            return -1;
+    }
+}
